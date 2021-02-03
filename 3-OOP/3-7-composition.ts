@@ -1,23 +1,19 @@
 {
   type CoffeeCup = {
     shots: number;
-    hasMilk: boolean;
+    hasMilk?: boolean;
+    hasSugar?: boolean;
   };
 
   interface CoffeeMaker {
     makeCoffee(shots: number): CoffeeCup;
   }
 
-  interface CommercialCoffeeMaker {
-    makeCoffee(shots: number): CoffeeCup;
-    fillCoffeeBeans(beans: number): void;
-    clean(): void;
-  }
-  class CoffeeMachine implements CoffeeMaker, CommercialCoffeeMaker {
+  class CoffeeMachine implements CoffeeMaker {
     private static BEANS_GRAMM_PER_SHOT: number = 7;
     private coffeeBeans: number = 0;
 
-    private constructor(coffeeBeans: number) {
+    public constructor(coffeeBeans: number) {
       this.coffeeBeans = coffeeBeans;
     }
 
@@ -53,6 +49,7 @@
       return {
         shots,
         hasMilk: false,
+        hasSugar: false,
       };
     }
 
@@ -63,26 +60,55 @@
     }
   }
 
-  class AmateurUser {
-    constructor(private machine: CoffeeMaker) {}
-    makeCoffee() {
-      const coffee = this.machine.makeCoffee(2);
-      console.log(coffee);
+  class CaffeLatteMachine extends CoffeeMachine {
+    constructor(beans: number, public readonly serialNumber: string) {
+      super(beans);
     }
-  }
-  class ProBarista {
-    constructor(private machine: CommercialCoffeeMaker) {}
-    makeCoffee() {
-      const coffee = this.machine.makeCoffee(2);
-      console.log(coffee);
-      this.machine.fillCoffeeBeans(45);
-      this.machine.clean();
+    private steamMilk() {
+      console.log(`steaming Milk`);
+    }
+
+    makeCoffee(shots: number): CoffeeCup {
+      const coffee = super.makeCoffee(shots);
+      this.steamMilk();
+      return {
+        ...coffee,
+        hasMilk: true,
+      };
     }
   }
 
-  //   const maker = new CoffeeMachine(32);
-  const maker: CoffeeMachine = CoffeeMachine.makeMachine(100);
-  const amateur = new AmateurUser(maker);
-  const pro = new ProBarista(maker);
-  pro.makeCoffee();
+  class SweetCoffeeMaker extends CoffeeMachine {
+    constructor(beans: number) {
+      super(beans);
+    }
+
+    private putSugar() {
+      console.log(`putting sugar`);
+    }
+
+    makeCoffee(shots: number): CoffeeCup {
+      const coffee = super.makeCoffee(shots);
+      this.putSugar();
+      return {
+        ...coffee,
+        hasSugar: true,
+      };
+    }
+  }
+
+  const machines: CoffeeMaker[] = [
+    new CoffeeMachine(16),
+    new CaffeLatteMachine(16, '123'),
+    new SweetCoffeeMaker(16),
+    new CoffeeMachine(16),
+    new CaffeLatteMachine(16, '123'),
+    new SweetCoffeeMaker(16),
+  ];
+  //   machines.forEach((machine) => {
+  //     console.log(`-----------`);
+  //     machine.makeCoffee(1);
+  //   });
+
+  console.log(new CoffeeMachine(12));
 }
