@@ -4,6 +4,7 @@
     hasMilk: boolean;
   };
 
+  // public, private, protect
   class CoffeeMaker {
     private static BEANS_GRAMM_PER_SHOT: number = 7;
     private coffeeBeans: number = 0;
@@ -40,25 +41,39 @@
   maker.fillCoffeeBeans(10);
   console.log(maker.makeCoffee(2));
 
+  // ------------------------------------- getter, setter
+  // constructor only activate once. so you need to use getter and setter
+
   class User {
+    private internalAage = 4;
     get fullName(): string {
       return `${this.firstName} ${this.lastName}`;
     }
-    private internalAage = 4;
+
+    set fullName(text: string) {
+      const name: string[] = text.split(' ');
+      this.firstName = name[0];
+      this.lastName = name[1];
+    }
 
     get age(): number {
       return this.internalAage;
     }
 
     set age(num: number) {
+      if (num < 0) {
+        throw Error('age must over 0');
+      }
       this.internalAage = num;
     }
 
+    // if you use private, public ,protect you don't repeat delcare variables again.
     constructor(private firstName: string, private lastName: string) {}
   }
   const user = new User('Steve', 'Jobs');
   console.log(user);
   user.age = 6;
+  user.fullName = 'senguk lee';
   console.log(user.age);
   console.log(user.fullName);
 }

@@ -18,6 +18,6 @@
   const numbers = findNumbers();
   numbers!.push(2);
 
-  const button = document.querySelector('.click')!;
+  const button = document.querySelector('class')!;
   button.nodeValue;
 }
