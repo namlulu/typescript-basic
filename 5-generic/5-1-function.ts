@@ -1,4 +1,5 @@
 {
+  // you can't make evnery type
   function checkNotNullBad(arg: number | null): number {
     if (arg == null) {
       throw new Error('not valid number!');
@@ -16,7 +17,7 @@
 
   function checkNotNull<T>(arg: T | null): T {
     if (arg == null) {
-      throw new Error('not valid number!');
+      throw Error('not valid');
     }
     return arg;
   }
